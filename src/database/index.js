@@ -9,14 +9,14 @@ const {
 module.exports = log => {
 	log.info('Connecting to database');
 
-	const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
-		dialect: 'mysql',
-		host: process.env.DB_HOST,
+	const sequelize = new Sequelize({
+		dialect: 'sqlite',
+		storage: './data/database.sqlite',
 		logging: log.debug
 	});
-	/* const sequelize = new Sequelize({
-		dialect: 'sqlite',
-		storage: './database.sqlite',
+	/* const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+		dialect: 'mysql',
+		host: process.env.DB_HOST,
 		logging: log.debug
 	}); */
 

@@ -28,13 +28,13 @@ fs.readdir(path('data/'), (err, items) => {
 	}	
 });
 
-const { Client: DiscordClient, Intents } = require('discord.js');
+const { Client: DiscordClient, GatewayIntentBits } = require('discord.js');
 // ✅❌⚠️❗🆕
 class Bot extends DiscordClient {
 	constructor() {
 		super({
 			autoReconnect: true,
-			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGE_REACTIONS , Intents.FLAGS.GUILD_MESSAGES] 
+			intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildMessages] 
 		});
 
 		this.utils = require('./utils/discord');
