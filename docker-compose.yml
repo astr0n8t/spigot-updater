@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  spigot-updater:
+    build: .
+    container_name: spigot-updater
+    restart: unless-stopped
+    
+    # Environment variables
+    environment:
+      - NODE_ENV=production
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+    
+    # Mount environment file and data directory
+    volumes:
+      - ./.env:/app/.env:ro
+      - ./data:/app/data
+      - ./config:/app/config:ro
+    
+    # Security options for Chrome/Puppeteer
+    security_opt:
+      - seccomp:unconfined
+    
+    # Additional capabilities needed for Chrome
+    cap_add:
+      - SYS_ADMIN
+    
+    # Shared memory size for Chrome
+    shm_size: 2gb
+    
+    # Resource limits (optional)
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 512M
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Optional: If you want to persist data across container recreations
+volumes:
+  spigot_data:
+    driver: local

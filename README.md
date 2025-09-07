@@ -37,6 +37,37 @@ The server is automatically stopped before and started after uploading, to avoid
 
 Visit [the docs](https://left4craft.github.io/spigot-updater/) for installation, setup, and configuration instructions.
 
+### Docker Installation
+
+This project now includes Docker support for easy deployment:
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/astr0n8t/spigot-updater.git
+   cd spigot-updater
+   ```
+
+2. **Copy and configure environment**:
+   ```bash
+   cp example.env .env
+   # Edit .env with your Discord token and other settings
+   ```
+
+3. **Configure your servers and plugins**:
+   ```bash
+   # Copy and modify the example config files
+   cp config/example-config.js config/config.js
+   cp config/example-servers.js config/servers.js
+   cp config/example-plugins.js config/plugins.js
+   ```
+
+4. **Run with Docker Compose**:
+   ```bash
+   docker-compose up -d
+   ```
+
+The Docker image includes all necessary dependencies including Chrome for Puppeteer web scraping.
+
 ## Support
 
 [![Discord server](https://discordapp.com/api/guilds/424571587413540874/widget.png?style=banner2)](https://discord.left4craft.org)

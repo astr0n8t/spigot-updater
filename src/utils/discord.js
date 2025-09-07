@@ -1,11 +1,11 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const config = require('../../config/config');
 
 let bot;
 
 module.exports = {
 	init: b => bot = b,
-	Embed: class Embed extends MessageEmbed {
+	Embed: class Embed extends EmbedBuilder {
 		constructor(data) {
 			super(Object.assign({
 				color: config.color,
