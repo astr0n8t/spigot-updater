@@ -65,20 +65,20 @@ If you're upgrading from the Node.js version:
 ### ✅ Fully Implemented
 - **Paper**: Full support for checking and downloading Paper server JARs
 - **GitHub**: Full support for plugins from GitHub Releases
+- **SpigotMC**: Full support for checking and downloading plugins from SpigotMC with Playwright
 - **Discord Bot**: Complete Discord integration with reaction handling
 - **Pterodactyl**: Full API client implementation
 - **Database**: SQLAlchemy ORM with SQLite support
 - **Update Workflow**: Complete check, download, and upload cycle
 
 ### ⚠️ Partially Implemented
-- **SpigotMC**: Structure in place, requires Playwright browser automation setup
 - **Bukkit**: Placeholder only, needs implementation
 - **Jenkins**: Placeholder only, needs implementation  
 - **ServerJars**: Placeholder only, needs implementation
 
 ### Implementation Notes
 
-The core functionality (Paper servers + GitHub plugins) is fully working. Additional sources can be implemented following the same pattern as Paper and GitHub.
+The core functionality (Paper servers + GitHub + SpigotMC plugins) is fully working. Additional sources can be implemented following the same pattern as Paper, GitHub, and SpigotMC.
 
 ## Database Compatibility
 
