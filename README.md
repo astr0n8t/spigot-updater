@@ -13,6 +13,8 @@
 
 Originally made for [Left4Craft](https://www.left4craft.org), this tool integrates with Discord, Pterodactyl, and various other APIs to keep your servers and their plugins up to date with minimal input from owners and admins.
 
+> **Note:** This project has been reimplemented in Python (previously Node.js). The core functionality remains the same.
+
 ## What it does
 
 This periodically checks your servers and plugins for updates and alerts you through Discord when when it finds a new version. You will be prompted to approve updates and are usually given links to the build/version's changelog.
@@ -37,6 +39,36 @@ The server is automatically stopped before and started after uploading, to avoid
 
 Visit [the docs](https://left4craft.github.io/spigot-updater/) for installation, setup, and configuration instructions.
 
+### Quick Start (Python)
+
+**Prerequisites**: Python 3.12+ or Docker
+
+**Local Installation**:
+
+```bash
+# Clone the repository
+git clone https://github.com/astr0n8t/spigot-updater.git
+cd spigot-updater
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Install Playwright browsers (for SpigotMC scraping)
+playwright install chromium
+
+# Configure
+cp example.env .env
+# Edit .env with your Discord token and other settings
+
+cp config/example-config.py config/config.py
+cp config/example-servers.py config/servers.py  
+cp config/example-plugins.py config/plugins.py
+# Edit config files for your setup
+
+# Run
+python -m src
+```
+
 ### Docker Installation
 
 This project now includes Docker support for easy deployment:
@@ -56,9 +88,9 @@ This project now includes Docker support for easy deployment:
 3. **Configure your servers and plugins**:
    ```bash
    # Copy and modify the example config files
-   cp config/example-config.js config/config.js
-   cp config/example-servers.js config/servers.js
-   cp config/example-plugins.js config/plugins.js
+   cp config/example-config.py config/config.py
+   cp config/example-servers.py config/servers.py
+   cp config/example-plugins.py config/plugins.py
    ```
 
 4. **Run with Docker Compose**:
@@ -66,7 +98,21 @@ This project now includes Docker support for easy deployment:
    docker-compose up -d
    ```
 
-The Docker image includes all necessary dependencies including Chrome for Puppeteer web scraping.
+The Docker image includes all necessary dependencies including Chromium for Playwright web scraping.
+
+## Migrating from Node.js version
+
+If you're upgrading from the previous Node.js version:
+
+1. Your `.env` file remains the same - no changes needed
+2. Config files need to be converted from JavaScript to Python:
+   - Rename `config.js` to `config.py` and update format (see `example-config.py`)
+   - Rename `servers.js` to `servers.py` and update format (see `example-servers.py`)
+   - Rename `plugins.js` to `plugins.py` and update format (see `example-plugins.py`)
+   - Note: In servers, `host` is now called `address` for clarity
+   - Note: In plugins, `repository` is now called `repo` for consistency
+3. Database schema is compatible - your existing `database.sqlite` will work
+4. Rebuild your Docker container with `docker-compose up -d --build`
 
 ## Support
 

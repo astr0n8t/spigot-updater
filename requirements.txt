@@ -1,3 +1,10 @@
-mkdocs-material
-mkdocs-awesome-pages-plugin
-mkdocs-git-revision-date-localized-plugin
+discord.py>=2.3.2
+python-dotenv>=1.0.0
+aiohttp>=3.9.0
+aiofiles>=23.2.1
+requests>=2.31.0
+sqlalchemy>=2.0.23
+aiosqlite>=0.19.0
+playwright>=1.40.0
+playwright-stealth>=0.1.0
+mcstatus>=11.1.1

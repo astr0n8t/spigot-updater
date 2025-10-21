@@ -6,9 +6,39 @@ data/plugins
 data/servers
 .vscode/
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
 # Files
 data/servers.json
 data/plugins.json
 .env
 /*.png
 config/config.js
+config/config.py
+config/servers.js
+config/servers.py
+config/plugins.js
+config/plugins.py
