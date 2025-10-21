@@ -8,9 +8,7 @@ services:
     
     # Environment variables
     environment:
-      - NODE_ENV=production
-      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+      - PLAYWRIGHT_BROWSERS_PATH=/home/spigot/.cache/ms-playwright
     
     # Mount environment file and data directory
     volumes:
@@ -18,15 +16,15 @@ services:
       - ./data:/app/data
       - ./config:/app/config:ro
     
-    # Security options for Chrome/Puppeteer
+    # Security options for Playwright/Chromium
     security_opt:
       - seccomp:unconfined
     
-    # Additional capabilities needed for Chrome
+    # Additional capabilities needed for Chromium
     cap_add:
       - SYS_ADMIN
     
-    # Shared memory size for Chrome
+    # Shared memory size for Chromium
     shm_size: 2gb
     
     # Resource limits (optional)

@@ -3,6 +3,12 @@ Upload files to Pterodactyl servers
 """
 import os
 import json
+import sys
+from pathlib import Path as PathLib
+
+# Add src directory to path
+sys.path.insert(0, str(PathLib(__file__).parent.parent))
+
 from pterodactyl import Pterodactyl
 from utils.minecraft import get_player_count, wait
 from utils.fs import path
