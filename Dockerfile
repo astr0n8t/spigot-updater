@@ -1,17 +1,16 @@
-# Use the official Node.js runtime as a parent image
-FROM node:18-bullseye-slim
+# Use Python 3.12 slim image
+FROM python:3.12-slim-bullseye
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files first for better caching
-COPY package*.json ./
+# Copy requirements first for better caching
+COPY requirements.txt ./
 
-# Install Node.js dependencies (skip chromium download for now)
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-RUN npm ci --only=production
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install minimal dependencies for Puppeteer and Chrome
+# Install minimal dependencies for Playwright
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
@@ -28,12 +27,9 @@ RUN apt-get update && apt-get install -y \
     libnss3 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
+# Install Playwright browsers
+RUN playwright install chromium
+RUN playwright install-deps chromium
 
 # Create data directories
 RUN mkdir -p /app/data/temp /app/data/servers /app/data/plugins
@@ -50,9 +46,8 @@ RUN groupadd -r spigot && useradd -r -g spigot -G audio,video spigot \
 # Switch to non-root user
 USER spigot
 
-# Set Puppeteer to use the installed Chrome
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+# Set Playwright to use installed browser
+ENV PLAYWRIGHT_BROWSERS_PATH=/home/spigot/.cache/ms-playwright
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["python", "-m", "src"]
