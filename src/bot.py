@@ -89,20 +89,29 @@ class SpigotUpdaterBot(discord.Client):
     @tasks.loop(hours=24)
     async def check_task(self):
         """Daily update check"""
-        if self.updater:
-            await self.updater.check()
+        try:
+            if self.updater:
+                await self.updater.check()
+        except Exception as e:
+            self.log.error(f'Error in check task: {e}')
     
     @tasks.loop(hours=1)
     async def download_task(self):
         """Hourly download task"""
-        if self.updater:
-            await self.updater.download()
+        try:
+            if self.updater:
+                await self.updater.download()
+        except Exception as e:
+            self.log.error(f'Error in download task: {e}')
     
     @tasks.loop(hours=12)
     async def upload_task(self):
         """Bi-daily upload task"""
-        if self.updater:
-            await self.updater.run()
+        try:
+            if self.updater:
+                await self.updater.run()
+        except Exception as e:
+            self.log.error(f'Error in upload task: {e}')
     
     @check_task.before_loop
     @download_task.before_loop

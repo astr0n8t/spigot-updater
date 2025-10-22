@@ -1,6 +1,7 @@
 """
 Upload files to Pterodactyl servers
 """
+import asyncio
 import os
 import json
 import sys
@@ -51,7 +52,7 @@ async def upload_files(bot):
             # Check which plugins need updating
             plugins_to_update = []
             server_plugins = server_config.get('plugins', [])
-            current_plugins = json.loads(server.plugins)
+            current_plugins = json.loads(server.plugins or '{}')
             
             for plugin_name in server_plugins:
                 plugin = session_db.query(bot.db['Plugins']).filter_by(name=plugin_name).first()
@@ -59,7 +60,7 @@ async def upload_files(bot):
                     plugins_to_update.append(plugin_name)
             
             # Check if server jar needs updating
-            jar_needs_updating = sjar and server.current != sjar.downloaded
+            jar_needs_updating = sjar and sjar.downloaded and server.current != sjar.downloaded
             
             if not plugins_to_update and not jar_needs_updating:
                 bot.log.info(f'{server_name} has no updates pending')
@@ -162,12 +163,20 @@ async def upload_files(bot):
                 ))
                 await message.clear_reactions()
                 
-            except Exception as timeout_error:
+            except asyncio.TimeoutError:
                 bot.log.warning(f'Update approval timed out for {server_name}')
                 await message.edit(embed=create_embed(
                     title=embed.title,
                     description='Timed out',
                     color=0x00FF00
+                ))
+                await message.clear_reactions()
+            except Exception as e:
+                bot.log.error(f'Error updating {server_name}: {e}')
+                await message.edit(embed=create_embed(
+                    title=embed.title,
+                    description=f'Update failed: {str(e)}',
+                    color=0xFF0000
                 ))
                 await message.clear_reactions()
         

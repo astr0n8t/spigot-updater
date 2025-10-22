@@ -20,12 +20,14 @@ class PterodactylHTTP:
         """Make GET request"""
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=self.headers) as response:
+                response.raise_for_status()
                 return await response.json()
     
     async def post_json(self, url: str, data: dict):
         """Make POST request"""
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=self.headers, json=data) as response:
+                response.raise_for_status()
                 return response
     
     async def upload_files(self, url: str, files: List[str]):
@@ -40,4 +42,5 @@ class PterodactylHTTP:
                     data.add_field('files', content, filename=filename)
             
             async with session.post(url, data=data) as response:
+                response.raise_for_status()
                 return response

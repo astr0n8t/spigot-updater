@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 from playwright.async_api import async_playwright
-from playwright_stealth import stealth
+from playwright_stealth import Stealth
 
 # Add src directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -56,7 +56,7 @@ async def check(bot):
         page = await context.new_page()
         
         # Apply stealth to avoid detection
-        await stealth(page)
+        await Stealth().apply_stealth_async(page)
         
         # Set timeouts
         page.set_default_timeout(bot.config.get('cloudflare_timeout', 300000))

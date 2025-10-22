@@ -19,4 +19,6 @@ def create_embed(
 
 def capitalise(text: str) -> str:
     """Capitalize first letter of text"""
-    return text[0].upper() + text[1:] if text else text
+    if not text:
+        return text
+    return text[0].upper() + text[1:]
