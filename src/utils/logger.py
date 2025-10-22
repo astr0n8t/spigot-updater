@@ -26,13 +26,13 @@ def setup_logger(name: str, debug: bool = None, log_to_file: bool = None) -> log
     """Setup and configure logger"""
     # Load config if available
     try:
-        import sys
-        sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'config'))
-        from config import DEBUG, SAVE_LOGS
+        from utils.config_loader import ConfigLoader
+        loader = ConfigLoader()
+        config = loader.load_config()
         if debug is None:
-            debug = DEBUG
+            debug = config.get('debug', False)
         if log_to_file is None:
-            log_to_file = SAVE_LOGS
+            log_to_file = config.get('save_logs', True)
     except:
         if debug is None:
             debug = False

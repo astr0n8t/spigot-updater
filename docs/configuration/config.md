@@ -1,6 +1,6 @@
 # Config
 
-The general configuration file, [`config/config.js`](https://github.com/Left4Craft/spigot-updater/blob/master/config/config.js).
+The general configuration file, [`config/config.yaml`](https://github.com/Left4Craft/spigot-updater/blob/master/config/config.yaml).
 
 ## Options
 
