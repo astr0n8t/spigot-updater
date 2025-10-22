@@ -1,28 +1,26 @@
 # Servers
 
-The servers configuration file, [`config/servers.js`](https://github.com/Left4Craft/spigot-updater/blob/master/config/servers.js).
-This file should export an object of server objects:
+The servers configuration file, [`config/servers.yaml`](https://github.com/Left4Craft/spigot-updater/blob/master/config/servers.yaml).
+This file should contain a YAML structure of server objects:
 
-```ts
-{
-	'Server Name': {
-		host?: String,
-		leftstatus?: String,
-		pterodactyl_id: String,
-		jar: {
-			type: String,
-			version: String
-		},
-		max_players: Number,
-		plugins: String[]
-	},
-}
+```yaml
+ServerName:
+  address: String  # optional
+  left4status: String  # optional
+  pterodactyl_id: String
+  jar:
+    type: String
+    version: String
+  max_players: Number
+  plugins:
+    - PluginName1
+    - PluginName2
 ```
 
 ## Server properties
 
 ??? summary "host"
-	### host
+	### address
 
 	:octicons-info-24: Conditionally optional
 	{: .details }
@@ -30,9 +28,11 @@ This file should export an object of server objects:
 	:octicons-checklist-24: Type: `String`
 	{: .details }
 
-	**One of `host` or `left4status` is required**.
+	**One of `address` or `left4status` is required**.
 
 	The address of this server to be queried for the player count, such as `mc.left4craft.org` or `mc.left4craft.org:25565`.
+
+	**Note**: This was previously called `host` in older versions.
 
 ??? summary "left4status"
 	### left4status
@@ -43,9 +43,9 @@ This file should export an object of server objects:
 	:octicons-checklist-24: Type: `String`
 	{: .details }
 
-	**One of `host` or `left4status` is required**.
+	**One of `address` or `left4status` is required**.
 
-	The ID of the server in the response to be returned from Left4Status. If you set this option, you must also set [`left4status` in `config.js`](../config/#left4status).
+	The ID of the server in the response to be returned from Left4Status. If you set this option, you must also set [`left4status` in `config.yaml`](../config/#left4status).
 
 	This option can be used if your internal servers can not be queried externally.
 
@@ -71,7 +71,7 @@ This file should export an object of server objects:
 		:octicons-checklist-24: Type: `String`
 		{: .details }
 
-		The server type, such as `paper`, `spigot`, and `bungeecord`. Must be a supported server type from the API you chose for [`server_jars_api` in `config.js`](../config/#server_jars_api).
+		The server type, such as `paper`, `spigot`, and `bungeecord`. Must be a supported server type from the API you chose for [`server_jars_api` in `config.yaml`](../config/#server_jars_api).
 
 	???+ summary "version"
 		#### version
@@ -95,4 +95,4 @@ This file should export an object of server objects:
 	:octicons-checklist-24: Type: `Array`
 	{: .details }
 
-	An array of plugin names that this server uses. Plugin names must match those set in [`plugins.js`](../plugins) **exactly**. The names are case-sensitive.
+	An array of plugin names that this server uses. Plugin names must match those set in [`plugins.yaml`](../plugins) **exactly**. The names are case-sensitive.

@@ -9,13 +9,10 @@ from dotenv import load_dotenv
 from pathlib import Path
 import sys
 
-# Add config to path
-config_path = Path(__file__).parent.parent / 'config'
-sys.path.insert(0, str(config_path))
-
 from database import init_database
 from updater import Updater
 from utils.discord_utils import create_embed, capitalise
+from utils.config_loader import ConfigLoader
 
 # Load environment variables
 load_dotenv()
@@ -37,18 +34,14 @@ class SpigotUpdaterBot(discord.Client):
         
         # Load config
         try:
-            from config import config as main_config
-            from servers import servers
-            from plugins import plugins
-            
-            self.config = {
-                **main_config,
-                'servers': servers,
-                'plugins': plugins
-            }
-        except ImportError as e:
+            loader = ConfigLoader()
+            self.config = loader.load_all()
+        except FileNotFoundError as e:
             self.log.error(f'Failed to load config: {e}')
-            self.log.error('Make sure config/config.py, config/servers.py, and config/plugins.py exist')
+            raise
+        except Exception as e:
+            self.log.error(f'Failed to load config: {e}')
+            self.log.error('Make sure config/config.yaml, config/servers.yaml, and config/plugins.yaml exist')
             raise
         
         # Initialize database

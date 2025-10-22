@@ -19,7 +19,9 @@ The entire codebase has been reimplemented in Python while maintaining the same 
 ### File Structure
 All source files have been moved from JavaScript to Python:
 - `src/*.js` → `src/*.py`
-- Configuration files: `config/*.js` → `config/*.py`
+- Configuration files: `config/*.js` → `config/*.py` → `config/*.yaml`
+
+**Note**: The configuration format has been changed from Python files to YAML files for better readability and easier editing.
 
 ### Configuration Changes
 
@@ -28,6 +30,8 @@ All source files have been moved from JavaScript to Python:
 - In `plugins.py`: `repository` is now called `repo` for consistency
 
 ## Migration Steps
+
+### From Node.js to Python
 
 If you're upgrading from the Node.js version:
 
@@ -38,18 +42,20 @@ If you're upgrading from the Node.js version:
 
 2. **Update configuration files**:
    ```bash
-   # Rename and convert your config files
-   cp config/example-config.py config/config.py
-   cp config/example-servers.py config/servers.py
-   cp config/example-plugins.py config/plugins.py
+   # Create new YAML config files
+   cp config/example-config.yaml config/config.yaml
+   cp config/example-servers.yaml config/servers.yaml
+   cp config/example-plugins.yaml config/plugins.yaml
    ```
 
-3. **Edit the new Python config files** based on your old JavaScript configs:
-   - Change `module.exports = {` to just the variable definition
+3. **Edit the new YAML config files** based on your old JavaScript configs:
+   - YAML uses a cleaner syntax with indentation
+   - Use `true`/`false` instead of JavaScript booleans
+   - Strings can be quoted or unquoted in most cases
+   - Comments use `#` instead of `//`
+   - Lists use `-` prefix instead of brackets
    - Change `host:` to `address:` in servers
    - Change `repository:` to `repo:` in plugins
-   - Remove trailing commas if they cause issues
-   - Use Python syntax (True/False instead of true/false)
 
 4. **Keep your environment file**:
    Your `.env` file doesn't need any changes!
@@ -59,6 +65,45 @@ If you're upgrading from the Node.js version:
    docker-compose down
    docker-compose up -d --build
    ```
+
+### From Python Config to YAML Config
+
+If you're upgrading from the Python version with `.py` config files:
+
+1. **Backup your existing config**:
+   ```bash
+   cp config/config.py config/config.py.bak
+   cp config/servers.py config/servers.py.bak
+   cp config/plugins.py config/plugins.py.bak
+   ```
+
+2. **Create YAML config files**:
+   ```bash
+   cp config/example-config.yaml config/config.yaml
+   cp config/example-servers.yaml config/servers.yaml
+   cp config/example-plugins.yaml config/plugins.yaml
+   ```
+
+3. **Convert your Python configs to YAML**:
+   - The structure is mostly the same
+   - Remove the `config = {`, `servers = {`, `plugins = {` wrappers
+   - Remove the closing `}` and the compatibility lines
+   - Use YAML syntax (indentation, colons, dashes for lists)
+   - Use `true`/`false` instead of Python `True`/`False`
+   - Remove quotes around dictionary keys
+   - Example conversion:
+     ```python
+     # Python
+     config = {
+         'server_name': 'MyServer',
+         'debug': True,
+     }
+     ```
+     ```yaml
+     # YAML
+     server_name: 'MyServer'
+     debug: true
+     ```
 
 ## Implementation Status
 

@@ -28,9 +28,9 @@ playwright install chromium
 cp example.env .env
 # Edit .env with your Discord token and other settings
 
-cp config/example-config.py config/config.py
-cp config/example-servers.py config/servers.py  
-cp config/example-plugins.py config/plugins.py
+cp config/example-config.yaml config/config.yaml
+cp config/example-servers.yaml config/servers.yaml  
+cp config/example-plugins.yaml config/plugins.yaml
 # Edit config files for your setup
 
 # Run
@@ -56,9 +56,9 @@ This project now includes Docker support for easy deployment:
 3. **Configure your servers and plugins**:
    ```bash
    # Copy and modify the example config files
-   cp config/example-config.py config/config.py
-   cp config/example-servers.py config/servers.py
-   cp config/example-plugins.py config/plugins.py
+   cp config/example-config.yaml config/config.yaml
+   cp config/example-servers.yaml config/servers.yaml
+   cp config/example-plugins.yaml config/plugins.yaml
    ```
 
 4. **Run with Docker Compose**:
