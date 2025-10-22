@@ -52,7 +52,7 @@ async def upload_files(bot):
             # Check which plugins need updating
             plugins_to_update = []
             server_plugins = server_config.get('plugins', [])
-            current_plugins = json.loads(server.plugins)
+            current_plugins = json.loads(server.plugins or '{}')
             
             for plugin_name in server_plugins:
                 plugin = session_db.query(bot.db['Plugins']).filter_by(name=plugin_name).first()
