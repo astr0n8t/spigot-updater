@@ -1,6 +1,7 @@
 """
 Upload files to Pterodactyl servers
 """
+import asyncio
 import os
 import json
 import sys
@@ -162,12 +163,20 @@ async def upload_files(bot):
                 ))
                 await message.clear_reactions()
                 
-            except Exception as timeout_error:
+            except asyncio.TimeoutError:
                 bot.log.warning(f'Update approval timed out for {server_name}')
                 await message.edit(embed=create_embed(
                     title=embed.title,
                     description='Timed out',
                     color=0x00FF00
+                ))
+                await message.clear_reactions()
+            except Exception as e:
+                bot.log.error(f'Error updating {server_name}: {e}')
+                await message.edit(embed=create_embed(
+                    title=embed.title,
+                    description=f'Update failed: {str(e)}',
+                    color=0xFF0000
                 ))
                 await message.clear_reactions()
         

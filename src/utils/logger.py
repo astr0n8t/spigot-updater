@@ -33,7 +33,7 @@ def setup_logger(name: str, debug: bool = None, log_to_file: bool = None) -> log
             debug = config.get('debug', False)
         if log_to_file is None:
             log_to_file = config.get('save_logs', True)
-    except:
+    except (ImportError, FileNotFoundError, Exception):
         if debug is None:
             debug = False
         if log_to_file is None:
