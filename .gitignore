@@ -34,6 +34,7 @@ wheels/
 # Files
 data/servers.json
 data/plugins.json
+data/database.sqlite
 .env
 /*.png
 config/config.js
