@@ -3,6 +3,7 @@ PaperMC download module
 """
 import aiohttp
 import aiofiles
+import hashlib
 from pathlib import Path
 import sys
 
@@ -35,8 +36,18 @@ async def download(bot):
             async with aiohttp.ClientSession() as session:
                 async with session.get(url) as response:
                     if response.status == 200:
+                        content = await response.read()
+                        
+                        # Verify checksum if available
+                        if jar.approved_checksum:
+                            checksum = hashlib.sha256(content).hexdigest()
+                            if checksum != jar.approved_checksum:
+                                bot.log.error(f'Checksum mismatch for Paper {jar.version} build {jar.approved_build}')
+                                bot.log.error(f'Expected: {jar.approved_checksum}, Got: {checksum}')
+                                continue
+                        
                         async with aiofiles.open(jar_dir / 'server.jar', 'wb') as f:
-                            await f.write(await response.read())
+                            await f.write(content)
                         
                         jar.downloaded = jar.approved_build
                         session_db.commit()

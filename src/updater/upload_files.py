@@ -60,7 +60,7 @@ async def upload_files(bot):
                     plugins_to_update.append(plugin_name)
             
             # Check if server jar needs updating
-            jar_needs_updating = sjar and server.current != sjar.downloaded
+            jar_needs_updating = sjar and sjar.downloaded and server.current != sjar.downloaded
             
             if not plugins_to_update and not jar_needs_updating:
                 bot.log.info(f'{server_name} has no updates pending')
