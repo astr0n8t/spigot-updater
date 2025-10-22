@@ -13,7 +13,7 @@ sys.path.insert(0, str(PathLib(__file__).parent.parent))
 from pterodactyl import Pterodactyl
 from utils.minecraft import get_player_count, wait
 from utils.fs import path
-from utils.discord_utils import create_embed
+from utils.discord_utils import create_server_update_embed, create_approval_embed
 
 async def upload_files(bot):
     """Upload approved updates to servers"""
@@ -75,22 +75,12 @@ async def upload_files(bot):
             current_players = await get_player_count(bot, server_name)
             
             # Create approval message
-            if current_players > max_players:
-                embed = create_embed(
-                    title=f'⚠️ {server_name} needs to update, but there are more than {max_players} players online',
-                    description=f'React with ⚠️ to update the server now, whilst there are **{current_players} players online**, react with ❌ to dismiss.',
-                    color=0xFF0000  # Red
-                )
-            else:
-                embed = create_embed(
-                    title=f'📣 {server_name} needs to update',
-                    description=f'React with ✅ to update the server now, whilst there are **{current_players} players online**, react with ❌ to dismiss.',
-                    color=0xFFA500  # Orange
-                )
-            
-            embed.add_field(
-                name='Plugins',
-                value=', '.join([f'`{p}`' for p in plugins_to_update]) or 'None'
+            embed = create_server_update_embed(
+                server_name=server_name,
+                current_players=current_players,
+                max_players=max_players,
+                plugins_to_update=plugins_to_update,
+                jar_update=jar_needs_updating
             )
             
             message = await bot.channel.send(embed=embed)
@@ -108,10 +98,12 @@ async def upload_files(bot):
                 
                 if str(reaction.emoji) == '❌':
                     bot.log.info(f'{user.name} blocked {server_name} from updating')
-                    await message.edit(embed=create_embed(
-                        title=embed.title,
-                        description=f'Dismissed by {user.mention}.',
-                        color=0x00FF00  # Green
+                    await message.edit(embed=create_approval_embed(
+                        title=f'{server_name} update dismissed',
+                        description='Update has been cancelled.',
+                        approved_by=user.mention,
+                        color=0x808080,  # Gray
+                        success=False
                     ))
                     await message.clear_reactions()
                     continue
@@ -156,27 +148,31 @@ async def upload_files(bot):
                 await panel.start(pterodactyl_id)
                 
                 # Update message
-                await message.edit(embed=create_embed(
-                    title=f'✅ {server_name} has been updated',
-                    description=f'Updated by {user.mention}.',
-                    color=0x00FF00
+                await message.edit(embed=create_approval_embed(
+                    title=f'{server_name} has been updated successfully',
+                    description='Server has been restarted with the latest updates.',
+                    approved_by=user.mention,
+                    color=0x00FF00,
+                    success=True
                 ))
                 await message.clear_reactions()
                 
             except asyncio.TimeoutError:
                 bot.log.warning(f'Update approval timed out for {server_name}')
-                await message.edit(embed=create_embed(
-                    title=embed.title,
-                    description='Timed out',
-                    color=0x00FF00
+                await message.edit(embed=create_approval_embed(
+                    title=f'{server_name} update timed out',
+                    description='No response received within 15 minutes.',
+                    color=0x808080,  # Gray
+                    success=False
                 ))
                 await message.clear_reactions()
             except Exception as e:
                 bot.log.error(f'Error updating {server_name}: {e}')
-                await message.edit(embed=create_embed(
-                    title=embed.title,
-                    description=f'Update failed: {str(e)}',
-                    color=0xFF0000
+                await message.edit(embed=create_approval_embed(
+                    title=f'{server_name} update failed',
+                    description=f'Error: {str(e)}',
+                    color=0xFF0000,
+                    success=False
                 ))
                 await message.clear_reactions()
         

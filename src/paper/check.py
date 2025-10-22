@@ -8,7 +8,7 @@ from pathlib import Path
 # Add src directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from utils.discord_utils import capitalise, create_embed
+from utils.discord_utils import capitalise, create_update_embed
 
 async def check(bot):
     """Check for PaperMC updates"""
@@ -66,16 +66,14 @@ async def check(bot):
                     
                     affected = ', '.join([f'`{s}`' for s in servers.keys()])
                     
-                    embed = create_embed(
-                        title=f'🆕 A new version of Paper {version} is available',
-                        description='React with ✅ to approve this update and add it to the queue.',
-                        color=0xFFA500  # Orange
+                    embed = create_update_embed(
+                        update_type='paper',
+                        name=f'Paper {version}',
+                        version=version,
+                        build=str(latest_build),
+                        changelog_url='https://papermc.io/downloads/paper',
+                        affected_servers=affected
                     )
-                    embed.add_field(name='Build', value=f'#{latest_build}', inline=True)
-                    embed.add_field(name='Changelog', 
-                                  value=f'[View on PaperMC](https://papermc.io/downloads/paper)', 
-                                  inline=False)
-                    embed.add_field(name='Affected servers', value=affected, inline=False)
                     
                     msg = await bot.channel.send(embed=embed)
                     await msg.add_reaction('✅')

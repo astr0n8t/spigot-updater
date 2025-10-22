@@ -11,7 +11,7 @@ from playwright_stealth import Stealth
 # Add src directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from utils.discord_utils import create_embed
+from utils.discord_utils import create_update_embed
 
 async def check(bot):
     """Check for SpigotMC plugin updates"""
@@ -143,18 +143,13 @@ async def check(bot):
                                             if plugin_name in cfg.get('plugins', [])])
                         
                         # Send Discord notification
-                        embed = create_embed(
-                            title=f'🆕 A new version of {plugin_name} is available',
-                            description='React with ✅ to approve this update and add it to the queue.',
-                            color=0xFFA500  # Orange
+                        embed = create_update_embed(
+                            update_type='spigot',
+                            name=plugin_name,
+                            version=latest,
+                            changelog_url=f'https://www.spigotmc.org/resources/{resource_id}/updates',
+                            affected_servers=affected or 'None'
                         )
-                        embed.add_field(name='Changelog', 
-                                      value=f'[View updates on SpigotMC](https://www.spigotmc.org/resources/{resource_id}/updates)',
-                                      inline=False)
-                        embed.add_field(name='Affected servers', 
-                                      value=f'Servers using this plugin:\n{affected}',
-                                      inline=False)
-                        embed.set_footer(text=f'SpigotMC version {latest}')
                         
                         msg = await bot.channel.send(embed=embed)
                         await msg.add_reaction('✅')
