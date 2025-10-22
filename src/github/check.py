@@ -8,7 +8,7 @@ from pathlib import Path
 # Add src directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from utils.discord_utils import create_embed
+from utils.discord_utils import create_update_embed
 
 async def check(bot):
     """Check for GitHub release updates"""
@@ -52,16 +52,13 @@ async def check(bot):
                     affected = ', '.join([f'`{s}`' for s, cfg in bot.config['servers'].items() 
                                         if plugin_name in cfg.get('plugins', [])])
                     
-                    embed = create_embed(
-                        title=f'🆕 A new version of {plugin_name} is available',
-                        description='React with ✅ to approve this update and add it to the queue.',
-                        color=0xFFA500
+                    embed = create_update_embed(
+                        update_type='github',
+                        name=plugin_name,
+                        version=latest,
+                        changelog_url=f'https://github.com/{repo}/releases/tag/{latest}',
+                        affected_servers=affected or 'None'
                     )
-                    embed.add_field(name='Version', value=latest, inline=True)
-                    embed.add_field(name='Changelog', 
-                                  value=f'[View on GitHub](https://github.com/{repo}/releases/tag/{latest})', 
-                                  inline=False)
-                    embed.add_field(name='Affected servers', value=affected or 'None', inline=False)
                     
                     msg = await bot.channel.send(embed=embed)
                     await msg.add_reaction('✅')

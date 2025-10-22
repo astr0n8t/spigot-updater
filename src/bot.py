@@ -11,7 +11,7 @@ import sys
 
 from database import init_database
 from updater import Updater
-from utils.discord_utils import create_embed, capitalise
+from utils.discord_utils import create_approval_embed, capitalise
 from utils.config_loader import ConfigLoader
 
 # Load environment variables
@@ -152,10 +152,11 @@ class SpigotUpdaterBot(discord.Client):
                     
                     self.log.info(f"{user.name} approved an update for {capitalise(jar_data['type'])} {jar_data['version']}")
                     
-                    embed = create_embed(
-                        title=f"✅ Update approved for {capitalise(jar_data['type'])} {jar_data['version']}",
-                        description=f'Approved by {user.mention}.\nThis will be updated during the next upload task.',
-                        color=0x00FF00
+                    embed = create_approval_embed(
+                        title=f"Update approved for {capitalise(jar_data['type'])} {jar_data['version']}",
+                        description='This will be updated during the next upload task.',
+                        approved_by=user.mention,
+                        success=True
                     )
                     await message.edit(embed=embed)
                     await message.clear_reactions()
@@ -173,10 +174,11 @@ class SpigotUpdaterBot(discord.Client):
                     
                     self.log.info(f"{user.name} approved an update for {plugin_data['name']}")
                     
-                    embed = create_embed(
-                        title=f"✅ Update approved for {plugin_data['name']}",
-                        description=f'Approved by {user.mention}.\nThis will be updated during the next upload task.',
-                        color=0x00FF00
+                    embed = create_approval_embed(
+                        title=f"Update approved for {plugin_data['name']}",
+                        description='This will be updated during the next upload task.',
+                        approved_by=user.mention,
+                        success=True
                     )
                     await message.edit(embed=embed)
                     await message.clear_reactions()
