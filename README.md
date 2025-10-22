@@ -5,8 +5,6 @@
 
 ## Installation & setup
 
-Visit [the docs](https://left4craft.github.io/spigot-updater/) for installation, setup, and configuration instructions.
-
 ### Quick Start (Python)
 
 **Prerequisites**: Python 3.12+ or Docker
