@@ -1,5 +1,4 @@
 # Folders
-node_modules
 logs/
 data/temp
 data/plugins
@@ -32,17 +31,9 @@ wheels/
 *.egg
 
 # Files
-data/servers.json
-data/plugins.json
 data/database.sqlite
 .env
 /*.png
-config/config.js
-config/config.py
-config/servers.js
-config/servers.py
-config/plugins.js
-config/plugins.py
 config/config.yaml
 config/config.yml
 config/servers.yaml
